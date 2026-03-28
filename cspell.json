@@ -1,0 +1,39 @@
+{
+    "version": "0.2",
+    "language": "pt-BR,en",
+    "ignorePaths": ["node_modules", "pnpm-lock.yaml", "dist", ".astro"],
+    "dictionaries": [
+        "developer-terms",
+        "names",
+        "project-terms",
+        "css",
+        "docker",
+        "fonts",
+        "html",
+        "lorem-ipsum",
+        "javascript",
+        "json",
+        "typescript",
+        "tsx"
+    ],
+    "caseSensitive": false,
+    "dictionaryDefinitions": [
+        {
+            "name": "developer-terms",
+            "path": "./.cspell/developer-terms.txt",
+            "addWords": true
+        },
+        {
+            "name": "names",
+            "path": "./.cspell/names.txt",
+            "addWords": true
+        },
+        {
+            "name": "project-terms",
+            "path": "./.cspell/project-terms.txt",
+            "addWords": true
+        }
+    ],
+    "words": [],
+    "ignoreWords": []
+}

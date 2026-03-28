@@ -1,0 +1,99 @@
+---
+import Card from '@components/Card.astro';
+import Icon from '@components/Icon.astro';
+import NeonLink from '@components/NeonLink.astro';
+import SectionHeader from '@components/SectionHeader.astro';
+
+const projects = [
+  {
+    title: "Space Wizard",
+    description: "Estúdio criativo que sou co-fundador, onde construímos experiências web, apps e jogos.",
+    url: "https://spacewiz.dev",
+    github: null as string | null,
+    tags: ["Studio", "Web"],
+    icon: "rocket",
+    color: "neon-purple",
+    isPrivate: false
+  },
+  {
+    title: "Firebound",
+    description: "Uma framework para jogos de roguelike com batalha por turnos construído em C# com Godot Engine.",
+    url: "https://firebound.dev",
+    github: "https://github.com/Space-Wizard-Studios/firebound",
+    tags: ["Game Dev", "Open Source"],
+    icon: "gamepad",
+    color: "neon-amber",
+    isPrivate: false
+  },
+  {
+    title: "FairCut",
+    description: "SaaS de acompanhamento financeiro para estúdios de jogos.",
+    url: "https://faircut.io",
+    github: null as string | null,
+    tags: ["SaaS", "Closed Beta"],
+    icon: "sparkles",
+    color: "neon-cyan",
+    isPrivate: true
+  }
+];
+
+const colorMap: Record<string, string> = {
+  'neon-purple': 'text-neon-purple',
+  'neon-amber': 'text-neon-amber',
+  'neon-cyan': 'text-neon-cyan',
+};
+---
+
+<section id="projects" class="relative px-4" data-animate>
+  <!-- Subtle grid background -->
+  <div class="absolute inset-0 grid-bg opacity-20"></div>
+  
+  <div class="relative max-w-6xl mx-auto">
+    <SectionHeader number="02" label="Projetos" tag="Projects" />
+
+    <!-- Projects grid -->
+    <div class="grid md:grid-cols-3 gap-6">
+      {projects.map((project, index) => (
+        <Card glowColor={project.color}>
+          <!-- Header with icon -->
+          <div class="flex items-center gap-3 mb-4">
+            <Icon name={project.icon} class="h-8 w-8 text-foreground group-hover:text-primary transition-colors duration-300 shrink-0" />
+            <h3 class="text-xl font-bold font-mono group-hover:text-primary transition-colors">
+              {project.title}
+            </h3>
+            <div class="ml-auto flex gap-2 shrink-0">
+              {project.github && (
+                <NeonLink href={project.github} external variant="ghost">
+                  <Icon name="github" class="h-5 w-5" />
+                </NeonLink>
+              )}
+              {project.isPrivate && (
+                <Icon name="lock" class="h-5 w-5 text-muted-foreground" />
+              )}
+            </div>
+          </div>
+
+          <!-- Description -->
+          <p class="text-muted-foreground text-sm mb-6 grow leading-relaxed">
+            {project.description}
+          </p>
+
+          <!-- Tags -->
+          <div class="flex flex-wrap gap-2 mb-6">
+            {project.tags.map((tag) => (
+              <span class="px-3 py-1 text-xs font-mono bg-secondary/50 border border-border rounded-full text-muted-foreground">
+                {tag}
+              </span>
+            ))}
+          </div>
+
+          <!-- Link button -->
+          <NeonLink href={project.url} external class="w-full h-8 px-3">
+            <Icon name="external-link" class="mr-2 h-4 w-4" />
+            Visitar
+          </NeonLink>
+        </Card>
+      ))}
+    </div>
+  </div>
+</section>

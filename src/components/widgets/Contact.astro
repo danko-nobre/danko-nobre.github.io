@@ -1,0 +1,59 @@
+---
+import Icon from '@components/Icon.astro';
+import SectionHeader from '@components/SectionHeader.astro';
+
+const socialLinks = [
+  {
+    name: "GitHub",
+    handle: "danko-nobre",
+    url: "https://github.com/danko-nobre",
+    icon: "github"
+  },
+  {
+    name: "LinkedIn",
+    handle: "danilo-nobre",
+    url: "https://linkedin.com/in/danilo-nobre",
+    icon: "linkedin"
+  },
+  {
+    name: "Instagram",
+    handle: "danko.nobre",
+    url: "https://instagram.com/danko.nobre",
+    icon: "instagram"
+  },
+  {
+    name: "Space Wizard",
+    handle: "spacewiz.dev",
+    url: "https://spacewiz.dev",
+    icon: "globe"
+  }
+];
+---
+
+<section id="contact" class="relative px-4" data-animate>
+  <div class="max-w-6xl mx-auto">
+    <SectionHeader number="04" label="Contato" tag="Connect" description="Vamos construir algo incrível juntos?" />
+
+    <!-- Social links grid -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+      {socialLinks.map((link, index) => (
+        <a
+          href={link.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="animate-item group relative p-6 rounded-lg bg-card/30 border border-border text-center opacity-0 translate-y-10 transition-all duration-500 hover:border-neon-cyan hover:shadow-[0_0_15px_var(--neon-cyan),0_0_30px_oklch(0.75_0.18_195/0.15)]"
+        >
+          <Icon name={link.icon} class="h-8 w-8 mx-auto mb-3 text-muted-foreground group-hover:text-neon-cyan transition-colors duration-300" />
+          
+          <p class="font-semibold text-sm mb-1 group-hover:text-neon-cyan transition-colors">
+            {link.name}
+          </p>
+          
+          <p class="font-mono text-xs text-muted-foreground">
+            @{link.handle}
+          </p>
+        </a>
+      ))}
+    </div>
+  </div>
+</section>

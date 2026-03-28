@@ -1,0 +1,105 @@
+---
+import Icon from "@components/Icon.astro";
+import NeonLink from "@components/NeonLink.astro";
+import AsciiText from "@components/AsciiText/AsciiText.astro";
+
+const roles = [
+  "Full-stack dev",
+  "Game dev",
+  "3D Generalist",
+  "Co-founder @spacewiz.dev",
+];
+---
+
+<section
+  class="relative md:min-h-screen py-24 flex items-center justify-center overflow-hidden"
+>
+  <!-- Grid background with radial fade -->
+  <div class="absolute inset-0 grid-bg"></div>
+
+  <!-- Content -->
+  <div
+    id="hero-content"
+    class="relative z-10 text-center px-4 opacity-0 translate-y-10 transition-all duration-1000 w-full max-w-5xl"
+  >
+    <!-- Terminal-style prefix -->
+    <div class="font-mono text-sm text-muted-foreground mb-4">
+      <span class="text-neon-cyan">$</span> whoami
+    </div>
+
+    <!-- ASCII Text Name -->
+    <AsciiText
+      text="Danko"
+      class="w-full h-40 sm:h-60 md:h-80 mx-auto mb-6"
+      fallbackClass="text-6xl sm:text-8xl md:text-9xl font-bold tracking-tighter neon-glow"
+    />
+
+    <!-- Rotating subtitle -->
+    <div class="h-8 mb-6 overflow-hidden">
+      <p
+        id="role-text"
+        class="font-mono text-lg sm:text-xl text-neon-cyan transition-all duration-500"
+      >
+        &gt; {roles[0]}<span class="animate-pulse">_</span>
+      </p>
+    </div>
+
+    <!-- Tagline -->
+    <p class="text-muted-foreground text-lg mb-10 font-mono italic">
+      jack of all nones, master of trades
+    </p>
+
+    <!-- CTA Buttons -->
+    <div class="flex flex-col sm:flex-row gap-4 justify-center">
+      <NeonLink
+        href="https://github.com/danko-nobre"
+        external
+        class="h-10 px-6"
+      >
+        <Icon name="github" class="mr-2 h-5 w-5" />
+        GitHub
+        <span class="ml-2">→</span>
+      </NeonLink>
+
+      <NeonLink href="https://spacewiz.dev" external class="h-10 px-6">
+        <Icon name="rocket" class="mr-2 h-5 w-5" />
+        spacewiz.dev
+        <span class="ml-2">→</span>
+      </NeonLink>
+    </div>
+  </div>
+
+  <!-- Scroll indicator -->
+  <div class="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
+    <div
+      class="w-6 h-10 border-2 border-muted-foreground rounded-full flex justify-center"
+    >
+      <div class="w-1 h-3 bg-muted-foreground rounded-full mt-2 animate-pulse">
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  const roles = [
+    "Full-stack dev",
+    "Game dev",
+    "3D Generalist",
+    "Co-founder @spacewiz.dev",
+  ];
+
+  const heroContent = document.getElementById("hero-content");
+  requestAnimationFrame(() => {
+    heroContent?.classList.remove("opacity-0", "translate-y-10");
+    heroContent?.classList.add("opacity-100", "translate-y-0");
+  });
+
+  let currentRole = 0;
+  const roleText = document.getElementById("role-text");
+  setInterval(() => {
+    currentRole = (currentRole + 1) % roles.length;
+    if (roleText) {
+      roleText.innerHTML = `&gt; ${roles[currentRole]}<span class="animate-pulse">_</span>`;
+    }
+  }, 2500);
+</script>

@@ -1,0 +1,79 @@
+---
+import SectionHeader from '@components/SectionHeader.astro';
+
+const techCategories = [
+  {
+    name: "Languages",
+    items: ["TypeScript", "JavaScript", "PHP", "Python", "C#", "Dart", "Go"]
+  },
+  {
+    name: "Frontend",
+    items: ["React", "Astro", "SolidJS", "TailwindCSS", "shadcn/ui", "Sass"]
+  },
+  {
+    name: "Backend/DB",
+    items: ["Node.js", "Laravel", "Prisma", "Drizzle", "PostgreSQL", "MySQL", "SQLite"]
+  },
+  {
+    name: "Game Dev",
+    items: ["Godot", "Unity", "Blender", "ZBrush", "3D Coat"]
+  },
+  {
+    name: "Tools & Infra",
+    items: ["GitHub Pages", "Vercel", "Netlify", "Firebase", "Figma"]
+  }
+];
+---
+
+<section id="tech" class="relative px-4" data-animate>
+  <div class="max-w-6xl mx-auto space-y-12">
+    <SectionHeader number="03" label="Tech Stack" tag="Skills" />
+
+    <!-- Tech grid -->
+    <div class="space-y-8">
+      {techCategories.map((category, categoryIndex) => (
+        <div
+          class="animate-item opacity-0 translate-y-10 transition-all duration-500"
+        >
+          <!-- Category label -->
+          <div class="flex items-center gap-4 mb-4">
+            <span class="font-mono text-sm text-primary">
+              {category.name}
+            </span>
+            <div class="flex-1 h-px bg-linear-to-r from-border to-transparent"></div>
+          </div>
+
+          <!-- Tech badges -->
+          <div class="flex flex-wrap gap-3">
+            {category.items.map((tech) => (
+              <div
+                class="animate-item group relative px-4 py-2 font-mono text-sm bg-secondary/30 border border-border rounded hover:border-primary hover:bg-primary/10 transition-all duration-300 cursor-default opacity-0 scale-95"
+              >
+                <span class="text-muted-foreground group-hover:text-foreground transition-colors">
+                  {tech}
+                </span>
+                <!-- Glow effect on hover -->
+                <div class="absolute inset-0 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-primary/5 blur-sm -z-10"></div>
+              </div>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+
+    <!-- Terminal decoration -->
+    <div class="p-4 rounded-lg bg-card/30 border border-border font-mono text-sm">
+      <div class="flex items-center gap-2 mb-3">
+        <div class="w-3 h-3 rounded-full bg-destructive/70"></div>
+        <div class="w-3 h-3 rounded-full bg-neon-amber/70"></div>
+        <div class="w-3 h-3 rounded-full bg-green-500/70"></div>
+        <span class="ml-2 text-muted-foreground text-xs">terminal</span>
+      </div>
+      <div class="space-y-1 text-muted-foreground">
+        <p><span class="text-neon-cyan">$</span> npm run build</p>
+        <p><span class="text-green-500">✓</span> Compiled successfully</p>
+        <p><span class="text-neon-cyan">$</span> <span class="cursor-blink">_</span></p>
+      </div>
+    </div>
+  </div>
+</section>

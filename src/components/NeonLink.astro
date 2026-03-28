@@ -1,0 +1,33 @@
+---
+interface Props {
+  href: string;
+  external?: boolean;
+  class?: string;
+  variant?: "outline" | "ghost";
+}
+
+const {
+  href,
+  external = false,
+  class: className = "",
+  variant = "outline",
+} = Astro.props;
+
+const baseClasses =
+  "inline-flex items-center justify-center font-mono text-sm transition-all duration-300";
+
+const variantClasses: Record<string, string> = {
+  outline:
+    "rounded-md border border-neon-cyan text-neon-cyan hover:bg-neon-cyan/10 hover:shadow-[0_0_12px_var(--neon-cyan),0_0_24px_oklch(0.75_0.18_195/0.15)]",
+  ghost: "text-muted-foreground hover:text-neon-cyan",
+};
+
+const classes = `${baseClasses} ${variantClasses[variant]} ${className}`;
+const externalAttrs = external
+  ? { target: "_blank" as const, rel: "noopener noreferrer" }
+  : {};
+---
+
+<a href={href} class={classes} {...externalAttrs}>
+  <slot />
+</a>

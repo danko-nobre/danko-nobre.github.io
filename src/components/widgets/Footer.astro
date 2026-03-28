@@ -1,0 +1,31 @@
+---
+const currentYear = new Date().getFullYear();
+---
+
+<footer class="relative py-8 px-4 border-t border-border">
+  <div class="max-w-6xl mx-auto">
+    <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+      <!-- Logo/Name -->
+      <div class="font-mono text-sm">
+        <span class="text-primary">Danko</span>
+        <span class="text-muted-foreground"> © {currentYear}</span>
+      </div>
+
+      <!-- Built with -->
+      <div class="font-mono text-xs text-muted-foreground">
+        <span class="text-neon-cyan">&lt;</span>
+        Construído com café e código
+        <span class="text-neon-cyan"> /&gt;</span>
+      </div>
+
+      <!-- Status -->
+      <div class="flex items-center gap-2 font-mono text-xs text-muted-foreground">
+        <span class="relative flex h-2 w-2">
+          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-500 opacity-75"></span>
+          <span class="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+        </span>
+        Disponível para projetos
+      </div>
+    </div>
+  </div>
+</footer>

@@ -1,73 +1,18 @@
 {
   "extends": "astro/tsconfigs/strict",
   "compilerOptions": {
-    "esModuleInterop": true,
-    "skipLibCheck": true,
-    "allowSyntheticDefaultImports": true,
-    "verbatimModuleSyntax": true,
-    "declaration": true,
-    "strict": true,
-    "strictNullChecks": true,
-    "allowJs": true,
-    "jsx": "react-jsx",
-    "moduleResolution": "node",
-    "outDir": "dist",
-    "module": "ES2022",
-    "target": "ES2022",
-    "lib": [
-      "ES2022",
-      "DOM"
-    ],
-    "types": [
-      "astro/client",
-      "vite/client"
-    ],
-    "baseUrl": ".",
     "plugins": [
       {
-        "name": "@astrojs/ts-plugin"
+        "name": "astrojs/ts-plugin"
       }
     ],
     "paths": {
-      "@styles/*": [
-        "src/assets/styles/*"
-      ],
-      "@assets/*": [
-        "src/assets/*"
-      ],
-      "@helpers/*": [
-        "src/helpers/*"
-      ],
-      "@components/*": [
-        "src/components/*"
-      ],
-      "@content/*": [
-        "src/content/*"
-      ],
-      "@layouts/*": [
-        "src/layouts/*"
-      ],
-      "@utils/*": [
-        "src/utils/*"
-      ],
-      "@hooks/*": [
-        "src/hooks/*"
-      ],
-      "types/*": [
-        "src/types/*"
-      ],
-      "@*": [
-        "src/*"
-      ]
-    },
-    "jsxImportSource": "react"
+      "@components/*": ["./src/components/*"],
+      "@layouts/*": ["./src/layouts/*"],
+      "@styles/*": ["./src/styles/*"],
+      "@/*": ["./src/*"]
+    }
   },
-  "include": [
-    "src",
-    "*.astro",
-    "*.tsx"
-  ],
-  "exclude": [
-    "node_modules"
-  ]
+  "include": [".astro/types.d.ts", "**/*"],
+  "exclude": ["dist"]
 }

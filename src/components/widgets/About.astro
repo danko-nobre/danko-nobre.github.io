@@ -1,0 +1,57 @@
+---
+import Card from "@components/Card.astro";
+import Icon from "@components/Icon.astro";
+import SectionHeader from "@components/SectionHeader.astro";
+
+const highlights = [
+  {
+    icon: "code",
+    title: "Dev Full-Stack",
+    description:
+      "Autodidata em TypeScript/JavaScript. Desenvolvo tanto no front quanto no back. Meu foco é em React, Tailwind e Astro, mas finjo que sei trabalhar com PHP, SQL e Node.js.",
+  },
+  {
+    icon: "rocket",
+    title: "Space Wizard",
+    description:
+      "Co-fundador e gerente de projetos em um estúdio criativo que constrói websites, apps nativos/mobile e outras mídias.",
+  },
+  {
+    icon: "briefcase",
+    title: "TSE - Tribunal Superior Eleitoral",
+    description:
+      "Desenvolvedor web construindo soluções educacionais que alcançam mais de 2 milhões de usuários em anos eleitorais.",
+  },
+  {
+    icon: "box",
+    title: "3D & Game Dev",
+    description:
+      "Apaixonado por game dev e 3D: produzo com Blender, ZBrush, 3D Coat - modelagem, texturização, rigging e animação.",
+  },
+];
+---
+
+<section id="about" class="relative px-4" data-animate>
+  <div class="max-w-6xl mx-auto">
+    <SectionHeader number="01" label="Sobre mim" tag="About" />
+
+    <div class="grid md:grid-cols-2 gap-8">
+      {
+        highlights.map((item, index) => (
+          <Card>
+            <div class="flex items-center gap-3 mb-3">
+              <Icon name={item.icon} class="h-7 w-7 text-foreground group-hover:text-primary transition-colors duration-300 shrink-0" />
+              <h3 class="text-xl font-bold font-mono group-hover:text-primary transition-colors">
+                {item.title}
+              </h3>
+            </div>
+
+            <p class="text-muted-foreground leading-relaxed">
+              {item.description}
+            </p>
+          </Card>
+        ))
+      }
+    </div>
+  </div>
+</section>

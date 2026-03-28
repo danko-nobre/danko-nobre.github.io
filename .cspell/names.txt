@@ -1,0 +1,6 @@
+Danko
+github
+Laravel
+linkedin
+shadcn
+Vercel

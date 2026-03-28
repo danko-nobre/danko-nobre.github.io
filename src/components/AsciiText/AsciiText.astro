@@ -1,0 +1,182 @@
+---
+interface Props {
+  text: string;
+  fallbackClass?: string;
+  class?: string;
+}
+
+const { text, fallbackClass = '', class: className = '' } = Astro.props;
+---
+
+<div id="ascii-container" class={`ascii-container relative ${className}`} data-text={text}>
+  <h1 id="fallback-name" class={`ascii-fallback absolute inset-0 flex items-center justify-center ${fallbackClass}`}>{text}</h1>
+</div>
+
+<script>
+  import { AsciiRenderer } from './AsciiRenderer';
+
+  const container = document.getElementById('ascii-container');
+
+  if (container) {
+    const text = container.dataset.text ?? 'Danko';
+    let ascii: AsciiRenderer | null = null;
+
+    const create = async (el: HTMLElement, w: number, h: number) => {
+      const instance = new AsciiRenderer(
+        { text, asciiFontSize: 8, textFontSize: 200, textColor: '#fdf9f3', planeBaseHeight: 8, enableWaves: true },
+        el, w, h,
+      );
+      await instance.init();
+      return instance;
+    };
+
+    const hideFallback = () => {
+      document.getElementById('fallback-name')!.style.display = 'none';
+    };
+
+    const setup = async () => {
+      const { width, height } = container.getBoundingClientRect();
+
+      if (width === 0 || height === 0) {
+        const obs = new IntersectionObserver(async ([entry]) => {
+          if (entry.isIntersecting && entry.boundingClientRect.width > 0) {
+            obs.disconnect();
+            const { width: w, height: h } = entry.boundingClientRect;
+            ascii = await create(container, w, h);
+            hideFallback();
+            ascii.load();
+            watchResize();
+          }
+        }, { threshold: 0.1 });
+        obs.observe(container);
+        return;
+      }
+
+      ascii = await create(container, width, height);
+      hideFallback();
+      ascii.load();
+      watchResize();
+    };
+
+    const watchResize = () => {
+      new ResizeObserver((entries) => {
+        if (!ascii || !entries[0]) return;
+        const { width: w, height: h } = entries[0].contentRect;
+        if (w > 0 && h > 0) ascii.setSize(w, h);
+      }).observe(container);
+    };
+
+    setup().catch(() => {
+      // WebGL not available - fallback h1 stays visible
+    });
+  }
+</script>
+
+<style is:global>
+  .ascii-container {
+    overflow: hidden;
+    cursor: pointer;
+  }
+
+  .ascii-container canvas {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+    visibility: hidden;
+  }
+
+  .ascii-container pre {
+    margin: 0;
+    user-select: none;
+    padding: 0;
+    line-height: 1em;
+    text-align: left;
+    position: absolute;
+    left: 0;
+    top: 0;
+    background-image: radial-gradient(
+      circle,
+      oklch(0.8 0.3 300) 0%,
+      oklch(0.82 0.22 195) 40%,
+      oklch(0.8 0.2 85) 100%
+    );
+    background-attachment: fixed;
+    -webkit-text-fill-color: transparent;
+    -webkit-background-clip: text;
+    background-clip: text;
+    mix-blend-mode: difference;
+    z-index: 9;
+    animation: ascii-wave 3s ease-in-out infinite;
+    transform-origin: center center;
+  }
+
+  .ascii-container.ascii-click-bounce pre {
+    animation: ascii-bounce 0.4s ease-out;
+  }
+
+  @keyframes ascii-wave {
+    0%, 100% { transform: scaleY(1) scaleX(1); }
+    25% { transform: scaleY(1.015) scaleX(0.995); }
+    50% { transform: scaleY(0.985) scaleX(1.005); }
+    75% { transform: scaleY(1.01) scaleX(0.998); }
+  }
+
+  @keyframes ascii-bounce {
+    0% { transform: scale(1); }
+    15% { transform: scale(1.12); }
+    40% { transform: scale(0.95); }
+    65% { transform: scale(1.03); }
+    100% { transform: scale(1); }
+  }
+
+  /* Hide fallback when ASCII is active */
+  .ascii-container:has(pre) .ascii-fallback {
+    display: none;
+  }
+
+  /* Glitch on hover */
+  .ascii-container.is-glitching {
+    animation: ascii-shake 0.12s infinite;
+  }
+
+  .ascii-container::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 20;
+    pointer-events: none;
+    opacity: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      oklch(0.75 0.18 195 / 0.06) 2px,
+      oklch(0.75 0.18 195 / 0.06) 4px
+    );
+    mask-image: radial-gradient(ellipse 70% 60% at 50% 50%, black 20%, transparent 70%);
+    -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 50%, black 20%, transparent 70%);
+    transition: opacity 0.2s;
+  }
+
+  .ascii-container.is-glitching::before {
+    opacity: 1;
+    animation: scan-flicker 0.08s infinite;
+  }
+
+  @keyframes ascii-shake {
+    0%, 100% { transform: translate(0, 0) skewX(0deg); }
+    20% { transform: translate(-3px, 1px) skewX(0.8deg); }
+    40% { transform: translate(2px, -1px) skewX(-0.4deg); }
+    60% { transform: translate(-1px, -2px) skewX(0.3deg); }
+    80% { transform: translate(3px, 0) skewX(-0.6deg); }
+  }
+
+  @keyframes scan-flicker {
+    0%, 100% { opacity: 0.8; }
+    50% { opacity: 0.3; }
+  }
+</style>

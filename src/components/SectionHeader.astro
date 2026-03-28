@@ -1,0 +1,27 @@
+---
+interface Props {
+  number: string;
+  label: string;
+  tag: string;
+  description?: string;
+}
+
+const { number, label, tag, description } = Astro.props;
+---
+
+<div class={description ? 'mb-12' : 'mb-16'}>
+  <div class="font-mono text-sm text-neon-cyan mb-2">
+    <span class="text-muted-foreground">// </span>
+    {number}. {label}
+  </div>
+  <h2 class={`text-4xl sm:text-5xl font-bold${description ? ' mb-4' : ''}`}>
+    <span class="text-muted-foreground">&lt;</span>
+    {tag}
+    <span class="text-muted-foreground"> /&gt;</span>
+  </h2>
+  {description && (
+    <p class="text-muted-foreground text-lg max-w-md">
+      {description}
+    </p>
+  )}
+</div>

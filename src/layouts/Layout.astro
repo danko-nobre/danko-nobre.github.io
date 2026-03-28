@@ -1,0 +1,77 @@
+---
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const {
+  title,
+  description = "Danko - desenvolvedor full-stack, entusiasta de game dev, generalista 3D e co-fundador do Space Wizard Studios.",
+} = Astro.props;
+
+import "@styles/global.css";
+---
+
+<!doctype html>
+<html lang="pt-BR" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <meta
+      name="keywords"
+      content="desenvolvedor, full-stack, game dev, 3D, Space Wizard Studios, Danko"
+    />
+    <meta name="author" content="Danko" />
+    <meta name="theme-color" content="#8b5cf6" />
+    <meta name="color-scheme" content="dark" />
+
+    <!-- Open Graph -->
+    <meta property="og:title" content={title} />
+    <meta
+      property="og:description"
+      content="jack of all nones, master of trades"
+    />
+    <meta property="og:type" content="website" />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>{title}</title>
+  </head>
+  <body class="font-sans antialiased">
+    <slot />
+
+    <!-- Intersection Observer for scroll animations -->
+    <script>
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              const items = entry.target.querySelectorAll(".animate-item");
+              items.forEach((item) => {
+                item.classList.remove(
+                  "opacity-0",
+                  "translate-y-10",
+                  "scale-95",
+                );
+                item.classList.add("opacity-100", "translate-y-0", "scale-100");
+              });
+            }
+          });
+        },
+        { threshold: 0.1 },
+      );
+
+      document.querySelectorAll("[data-animate]").forEach((section) => {
+        observer.observe(section);
+      });
+    </script>
+  </body>
+</html>

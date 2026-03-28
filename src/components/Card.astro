@@ -1,0 +1,29 @@
+---
+interface Props {
+  glowColor?: string;
+  class?: string;
+}
+
+const {
+  glowColor = "neon-purple",
+  class: className = "",
+} = Astro.props;
+---
+
+<div
+  class={`animate-item group relative flex flex-col h-full p-6 rounded-lg bg-card/50 border border-border card-glow overflow-hidden opacity-0 translate-y-10 transition-all duration-500 ${className}`}
+>
+  <!-- Scanline effect -->
+  <div
+    class="absolute inset-0 scanlines opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
+  >
+  </div>
+
+  <slot />
+
+  <!-- Top border glow on hover -->
+  <div
+    class={`absolute top-0 left-0 right-0 h-px bg-linear-to-r from-transparent via-${glowColor} to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none`}
+  >
+  </div>
+</div>
