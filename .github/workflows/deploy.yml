@@ -17,9 +17,6 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./astro
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -34,7 +31,7 @@ jobs:
         with:
           node-version: 22
           cache: pnpm
-          cache-dependency-path: astro/pnpm-lock.yaml
+          cache-dependency-path: pnpm-lock.yaml
 
       - name: Setup Pages
         id: pages
@@ -49,7 +46,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./astro/dist
+          path: ./dist
 
   deploy:
     environment:
