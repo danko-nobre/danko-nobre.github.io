@@ -1,5 +1,9 @@
 ---
 import SectionHeader from '@components/SectionHeader.astro';
+import { getLocale, t } from '@/i18n/ui';
+
+const locale = getLocale(Astro.currentLocale);
+const strings = t(locale).skills;
 
 const techCategories = [
   {
@@ -27,7 +31,7 @@ const techCategories = [
 
 <section id="tech" class="relative px-4" data-animate>
   <div class="max-w-6xl mx-auto space-y-12">
-    <SectionHeader number="03" label="Tech Stack" tag="Skills" />
+    <SectionHeader label={strings.label} tag="Skills" description={strings.description} />
 
     <!-- Tech grid -->
     <div class="space-y-8">

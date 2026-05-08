@@ -1,6 +1,10 @@
 ---
 import Icon from '@components/Icon.astro';
 import SectionHeader from '@components/SectionHeader.astro';
+import { getLocale, t } from '@/i18n/ui';
+
+const locale = getLocale(Astro.currentLocale);
+const strings = t(locale).contact;
 
 const socialLinks = [
   {
@@ -32,7 +36,7 @@ const socialLinks = [
 
 <section id="contact" class="relative px-4" data-animate>
   <div class="max-w-6xl mx-auto">
-    <SectionHeader number="04" label="Contato" tag="Connect" description="Vamos construir algo incrível juntos?" />
+    <SectionHeader label={strings.label} tag="Connect" description={strings.description} />
 
     <!-- Social links grid -->
     <div class="grid grid-cols-2 md:grid-cols-4 gap-4">

@@ -3,57 +3,51 @@ import Card from '@components/Card.astro';
 import Icon from '@components/Icon.astro';
 import NeonLink from '@components/NeonLink.astro';
 import SectionHeader from '@components/SectionHeader.astro';
+import { getLocale, t } from '@/i18n/ui';
 
-const projects = [
+const locale = getLocale(Astro.currentLocale);
+const strings = t(locale).projects;
+
+const meta = [
   {
-    title: "Space Wizard",
-    description: "Estúdio criativo que sou co-fundador, onde construímos experiências web, apps e jogos.",
     url: "https://spacewiz.dev",
     github: null as string | null,
     tags: ["Studio", "Web"],
     icon: "rocket",
     color: "neon-purple",
-    isPrivate: false
+    isPrivate: false,
   },
   {
-    title: "Firebound",
-    description: "Uma framework para jogos de roguelike com batalha por turnos construído em C# com Godot Engine.",
     url: "https://firebound.dev",
     github: "https://github.com/Space-Wizard-Studios/firebound",
     tags: ["Game Dev", "Open Source"],
     icon: "gamepad",
     color: "neon-amber",
-    isPrivate: false
+    isPrivate: false,
   },
   {
-    title: "FairCut",
-    description: "SaaS de acompanhamento financeiro para estúdios de jogos.",
     url: "https://faircut.io",
     github: null as string | null,
     tags: ["SaaS", "Closed Beta"],
     icon: "sparkles",
     color: "neon-cyan",
-    isPrivate: true
-  }
+    isPrivate: true,
+  },
 ];
 
-const colorMap: Record<string, string> = {
-  'neon-purple': 'text-neon-purple',
-  'neon-amber': 'text-neon-amber',
-  'neon-cyan': 'text-neon-cyan',
-};
+const projects = strings.items.map((item, i) => ({ ...item, ...meta[i] }));
 ---
 
 <section id="projects" class="relative px-4" data-animate>
   <!-- Subtle grid background -->
   <div class="absolute inset-0 grid-bg opacity-20"></div>
-  
+
   <div class="relative max-w-6xl mx-auto">
-    <SectionHeader number="02" label="Projetos" tag="Projects" />
+    <SectionHeader label={strings.label} tag="Projects" description={strings.description} />
 
     <!-- Projects grid -->
     <div class="grid md:grid-cols-3 gap-6">
-      {projects.map((project, index) => (
+      {projects.map((project) => (
         <Card glowColor={project.color}>
           <!-- Header with icon -->
           <div class="flex items-center gap-3 mb-4">
@@ -90,7 +84,7 @@ const colorMap: Record<string, string> = {
           <!-- Link button -->
           <NeonLink href={project.url} external class="w-full h-8 px-3">
             <Icon name="external-link" class="mr-2 h-4 w-4" />
-            Visitar
+            {strings.visit}
           </NeonLink>
         </Card>
       ))}

@@ -1,4 +1,8 @@
 ---
+import { getLocale, t } from '@/i18n/ui';
+
+const locale = getLocale(Astro.currentLocale);
+const strings = t(locale).footer;
 const currentYear = new Date().getFullYear();
 ---
 
@@ -14,7 +18,7 @@ const currentYear = new Date().getFullYear();
       <!-- Built with -->
       <div class="font-mono text-xs text-muted-foreground">
         <span class="text-neon-cyan">&lt;</span>
-        Construído com café e código
+        {strings.builtWith}
         <span class="text-neon-cyan"> /&gt;</span>
       </div>
 
@@ -24,7 +28,7 @@ const currentYear = new Date().getFullYear();
           <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-500 opacity-75"></span>
           <span class="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
         </span>
-        Disponível para projetos
+        {strings.available}
       </div>
     </div>
   </div>
