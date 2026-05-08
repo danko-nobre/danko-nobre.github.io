@@ -68,20 +68,11 @@ export class AsciiRenderer {
   }
 
   private setupMesh() {
-    this.textCanvas = new TextCanvas(this.opts.text, {
-      fontSize: this.opts.textFontSize,
-      fontFamily: 'JetBrains Mono',
-      color: this.opts.textColor,
-    });
-    this.textCanvas.resize();
-    this.textCanvas.render();
-
-    this.texture = new THREE.CanvasTexture(this.textCanvas.canvas);
+    const { canvas, aspect } = this.buildTextCanvas(this.opts.text);
+    this.texture = new THREE.CanvasTexture(canvas);
     this.texture.minFilter = THREE.NearestFilter;
 
-    const aspect = this.textCanvas.canvas.width / this.textCanvas.canvas.height;
     const bh = this.opts.planeBaseHeight;
-
     this.geometry = new THREE.PlaneGeometry(bh * aspect, bh, 36, 36);
     this.material = new THREE.ShaderMaterial({
       vertexShader,
@@ -96,6 +87,45 @@ export class AsciiRenderer {
     });
     this.mesh = new THREE.Mesh(this.geometry, this.material);
     this.scene.add(this.mesh);
+  }
+
+  private buildTextCanvas(text: string) {
+    this.textCanvas = new TextCanvas(text, {
+      fontSize: this.opts.textFontSize,
+      fontFamily: 'JetBrains Mono',
+      color: this.opts.textColor,
+    });
+    this.textCanvas.resize();
+    this.textCanvas.render();
+    const canvas = this.textCanvas.canvas;
+    return { canvas, aspect: canvas.width / canvas.height };
+  }
+
+  setText(text: string) {
+    if (text === this.opts.text) return;
+    this.opts.text = text;
+    this.texture?.dispose();
+    this.geometry?.dispose();
+
+    const { canvas, aspect } = this.buildTextCanvas(text);
+    this.texture = new THREE.CanvasTexture(canvas);
+    this.texture.minFilter = THREE.NearestFilter;
+
+    const bh = this.opts.planeBaseHeight;
+    this.geometry = new THREE.PlaneGeometry(bh * aspect, bh, 36, 36);
+    this.mesh.geometry = this.geometry;
+    this.material.uniforms.uTexture.value = this.texture;
+  }
+
+  async transitionTo(text: string) {
+    if (text === this.opts.text) return;
+    this.filter.hueBoost += (Math.random() > 0.5 ? 1 : -1) * (180 + Math.random() * 120);
+    this.clickWaveBoost = 4.0;
+    this.targetGlitch = 2.0;
+    await new Promise((r) => setTimeout(r, 220));
+    this.setText(text);
+    await new Promise((r) => setTimeout(r, 380));
+    this.targetGlitch = this.isHovering ? 1.0 : 0.0;
   }
 
   private setupRenderer() {

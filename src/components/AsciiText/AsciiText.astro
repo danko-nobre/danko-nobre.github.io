@@ -1,15 +1,32 @@
 ---
 interface Props {
-  text: string;
+  text?: string;
+  texts?: string[];
+  cycleMs?: number;
   fallbackClass?: string;
   class?: string;
 }
 
-const { text, fallbackClass = '', class: className = '' } = Astro.props;
+const {
+  text,
+  texts,
+  cycleMs = 3000,
+  fallbackClass = '',
+  class: className = '',
+} = Astro.props;
+
+const list = texts && texts.length > 0 ? texts : [text ?? 'Danko'];
+const initial = list[0];
 ---
 
-<div id="ascii-container" class={`ascii-container relative ${className}`} data-text={text}>
-  <h1 id="fallback-name" class={`ascii-fallback absolute inset-0 flex items-center justify-center ${fallbackClass}`}>{text}</h1>
+<div
+  id="ascii-container"
+  class={`ascii-container relative ${className}`}
+  data-text={initial}
+  data-texts={JSON.stringify(list)}
+  data-cycle-ms={cycleMs}
+>
+  <h1 id="fallback-name" class={`ascii-fallback absolute inset-0 flex items-center justify-center ${fallbackClass}`}>{initial}</h1>
 </div>
 
 <script>
@@ -19,7 +36,12 @@ const { text, fallbackClass = '', class: className = '' } = Astro.props;
 
   if (container) {
     const text = container.dataset.text ?? 'Danko';
+    const texts = JSON.parse(container.dataset.texts ?? '[]') as string[];
+    const cycleMs = Number(container.dataset.cycleMs ?? '3000');
     let ascii: AsciiRenderer | null = null;
+    let cycleTimer: ReturnType<typeof setInterval> | null = null;
+    let cycleIndex = 0;
+    let paused = false;
 
     const create = async (el: HTMLElement, w: number, h: number) => {
       const instance = new AsciiRenderer(
@@ -34,6 +56,15 @@ const { text, fallbackClass = '', class: className = '' } = Astro.props;
       document.getElementById('fallback-name')!.style.display = 'none';
     };
 
+    const startCycle = () => {
+      if (texts.length < 2 || cycleTimer) return;
+      cycleTimer = setInterval(() => {
+        if (paused || !ascii) return;
+        cycleIndex = (cycleIndex + 1) % texts.length;
+        ascii.transitionTo(texts[cycleIndex]);
+      }, cycleMs);
+    };
+
     const setup = async () => {
       const { width, height } = container.getBoundingClientRect();
 
@@ -46,6 +77,7 @@ const { text, fallbackClass = '', class: className = '' } = Astro.props;
             hideFallback();
             ascii.load();
             watchResize();
+            startCycle();
           }
         }, { threshold: 0.1 });
         obs.observe(container);
@@ -56,6 +88,7 @@ const { text, fallbackClass = '', class: className = '' } = Astro.props;
       hideFallback();
       ascii.load();
       watchResize();
+      startCycle();
     };
 
     const watchResize = () => {
@@ -65,6 +98,20 @@ const { text, fallbackClass = '', class: className = '' } = Astro.props;
         if (w > 0 && h > 0) ascii.setSize(w, h);
       }).observe(container);
     };
+
+    container.addEventListener('mouseenter', () => { paused = true; });
+    container.addEventListener('mouseleave', () => { paused = false; });
+
+    container.addEventListener('click', () => {
+      if (texts.length < 2 || !ascii) return;
+      cycleIndex = (cycleIndex + 1) % texts.length;
+      ascii.transitionTo(texts[cycleIndex]);
+      if (cycleTimer) {
+        clearInterval(cycleTimer);
+        cycleTimer = null;
+      }
+      startCycle();
+    });
 
     setup().catch(() => {
       // WebGL not available - fallback h1 stays visible
