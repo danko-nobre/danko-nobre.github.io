@@ -1,21 +1,24 @@
 ---
+import { getLocale, t } from "@/i18n/ui";
+import LocaleSwitcher from "@components/LocaleSwitcher.astro";
+
 interface Props {
-  title: string;
+  title?: string;
   description?: string;
 }
 
+const locale = getLocale(Astro.currentLocale);
+const strings = t(locale);
+
 const canonicalURL = new URL(Astro.url.pathname, Astro.site ?? "https://danko-nobre.github.io");
 
-const {
-  title,
-  description = "Danko - desenvolvedor full-stack, entusiasta de game dev, generalista 3D e co-fundador do Space Wizard Studios.",
-} = Astro.props;
+const { title = strings.meta.title, description = strings.meta.description } = Astro.props;
 
 import "@styles/global.css";
 ---
 
 <!doctype html>
-<html lang="pt-BR" class="dark">
+<html lang={strings.htmlLang} class="dark">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -35,7 +38,7 @@ import "@styles/global.css";
     <meta property="og:type" content="website" />
     <meta property="og:url" content={canonicalURL.href} />
     <meta property="og:image" content={new URL("/default.png", canonicalURL.origin).href} />
-    <meta property="og:locale" content="pt_BR" />
+    <meta property="og:locale" content={strings.ogLocale} />
     <meta property="og:site_name" content="Danko" />
 
     <!-- Twitter -->
@@ -60,6 +63,7 @@ import "@styles/global.css";
     <title>{title}</title>
   </head>
   <body class="font-sans antialiased">
+    <LocaleSwitcher />
     <slot />
 
     <!-- Intersection Observer for scroll animations -->

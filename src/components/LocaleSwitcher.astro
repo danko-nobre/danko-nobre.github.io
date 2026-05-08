@@ -1,0 +1,16 @@
+---
+import { altHref, getLocale, languages } from '@/i18n/ui';
+
+const locale = getLocale(Astro.currentLocale);
+const otherLocale = locale === 'pt' ? 'en' : 'pt';
+---
+
+<a
+  href={altHref(locale)}
+  class="fixed top-4 right-4 z-50 font-mono text-xs px-3 py-1.5 rounded border border-border bg-background/70 backdrop-blur-sm text-muted-foreground hover:text-neon-cyan hover:border-neon-cyan hover:shadow-[0_0_12px_oklch(0.75_0.18_195/0.4)] transition-all"
+  aria-label={`Switch to ${languages[otherLocale]}`}
+>
+  <span class="text-neon-cyan">{languages[locale]}</span>
+  <span class="text-muted-foreground">/</span>
+  <span>{languages[otherLocale]}</span>
+</a>
